@@ -15,7 +15,7 @@ const  usersRouter = require('./routes/users');
 const  app = express();
 // conect to DB
 
-mongoose.connect('mongodb+srv://admin:h5VtkVVkwL1v1WZx@cluster0.3oqox.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://admin:VkwL1v1WZx@cluster0.3oqox.mongodb.net/ssdassdf?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 const db  = mongoose.connection;
 db.on('error', console.error.bind(console,'connection error:'));
 db.once('open',()=>{
