@@ -1,58 +1,65 @@
-const  createError = require('http-errors');
-const  express = require('express');
-const  path = require('path');
-const  cookieParser = require('cookie-parser');
-const  logger = require('morgan');
-const passport =  require('passport')
-const mongoose = require('mongoose');
-const session = require('express-session')
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const passport = require('passport');
 const User = require('./models/user');
-const  indexRouter = require('./routes/index');
-const  postRouter = require('./routes/posts');
-const  usersRouter = require('./routes/users');
+const session = require('express-session');
+const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+// require routes
+const index 	= require('./routes/index');
+const posts 	= require('./routes/posts');
+const reviews = require('./routes/reviews');
 
+const app = express();
 
-const  app = express();
-// conect to DB
+// connect to the database
+mongoose.connect('mongodb+srv://admin:admin@cluster0.3oqox.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true });
 
-mongoose.connect('mongodb+srv://admin:h5VtkVVkwL1v1WZx@cluster0.3oqox.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
-const db  = mongoose.connection;
-db.on('error', console.error.bind(console,'connection error:'));
-db.once('open',()=>{
-  console.log('we connected');
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('we\'re connected!');
 });
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// config passport and session
+app.use(methodOverride('_method'));
+// Configure Passport and Sessions
 app.use(session({
   secret: 'hang ten dude!',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: true
+}));
 
-})) 
-
-// CHANGE: USE "createStrategy" INSTEAD OF "authenticate"
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(User.createStrategy());
 
+passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use('/posts',postRouter);
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// Mount routes
+app.use('/', index);
+app.use('/posts', posts);
+app.use('/posts/:id/reviews', reviews);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handler

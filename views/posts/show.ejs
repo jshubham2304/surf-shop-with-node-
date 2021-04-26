@@ -1,0 +1,7 @@
+<h1>Title :<%=posts.title %> </h1>
+<div>
+<div> Price : <%=posts.price  %> </div>
+<div> Location : <%=posts.location  %> </div>
+<div> <a href="/posts/<%=posts.id%>/edit">Edit</a> </div>
+<div> <form action="/posts/<%=posts.id%>?_method=DELETE" method="POST"><input type="submit" value="Delete"/></form> </div>
+</div>
