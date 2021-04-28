@@ -1,9 +1,40 @@
-<h1>Edit Posts!!</h1>
-<form action="/posts/<%=posts.id%>?_method=PUT"method ="Post">
-    <div><input type="text" placeholder="Title" , name="posts[title]" value ="<%=posts.title%>" /></div>
-    <div><input type="text" placeholder="Price" , name="posts[price]" value ="<%=posts.price%>"/></div>
-    <div><textarea type="text" placeholder="Dexription" , name="posts[description]" ><%=posts.description%></textarea></div>
-    <div><input type="text" placeholder="Location" , name="posts[location]" value ="<%=posts.location%>"/></div>
-    
-    <input type="submit"/>
+<h1>Edit Post!</h1>
+
+<form action="/posts/<%= post.id %>?_method=PUT" method="POST" id='postEditForm' enctype="multipart/form-data">
+	<div><input type="text" name="post[title]" placeholder="Title" value="<%= post.title  %>"></div>
+	<div><input type="text" name="post[price]" placeholder="Price" value="<%= post.price  %>"></div>
+	<div>
+		<input type="file" id ="imageUpload" accept="images/*" name="images" multiple />
+		<div>
+			
+			<% post.images.forEach(function(image,i) { %>
+			<img src="<%= image.url %>" alt="Surf board image" width="150px">
+			<label for="image<%=i%>">Delete</label>
+			<input type='checkbox' name ="deleteImages[]" class="imageDeleteCheckBox" value="<%= image.public_id%>"/>
+			<% }); %>
+		</div>
+		
+	</div>
+	<div>
+		<textarea name="post[description]" placeholder="Description"><%= post.description  %></textarea>
+	</div>
+	<div><input type="text" name="post[location]" placeholder="Location" value="<%= post.location  %>"></div>
+
+	<input type="submit">
 </form>
+<script>
+let postEditForm=document.getElementById('postEditForm')	;
+postEditForm.addEventListener('submit',(event)=>{
+	let imageUpload = document.getElementById('imageUpload').files.length;	
+let Exitimgs =  document.querySelectorAll('.imageDeleteCheckBox').length;
+let Deleteimgs =  document.querySelectorAll('.imageDeleteCheckBox:checked').length;
+let total  =  Exitimgs - Deleteimgs+imageUpload;
+if(total>4){
+	event.preventDefault();
+	alert(`You need to remove at least ${total-4} images!`)
+}
+
+});
+
+	
+</script>
