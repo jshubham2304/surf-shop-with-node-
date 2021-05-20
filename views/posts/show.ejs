@@ -1,4 +1,4 @@
-<% layout('./layouts/boilerplate') -%>
+<% layout('layouts/post-show-layout') -%>
 <h1><%= post.title %></h1>
 <div>Price: <%= post.price %></div>
 <div><%= post.description %></div>
@@ -8,6 +8,7 @@
 	<img src="<%= image.url %>" alt="Surf board image" width="200px">
 	<% }); %>
 </div>
+<div id='map'></div>
 <div>
 	<a href="/posts/<%= post.id %>/edit">
 		<button>Edit</button>
@@ -18,17 +19,37 @@
 		<input type="submit" value="Delete">
 	</form>
 </div>
-<h2>Reviews</h2>
-<h3>Create a review</h3>
-<form action="/posts/<%=post.id%>/reviews" method="POST">
-	<textarea name="review[body]" required ></textarea>
-	<input type="number" min="1" max="5" name="review[rating]" step="1" required/>
-	<input type="submit"/>
+
+
+<h2>Create a Review</h2>
+<form action="/posts/<%= post.id %>/reviews" method="POST">
+	<textarea name="review[body]" required></textarea>
+	<input type="number" name="review[rating]" min="1" max="5" step="1" required>
+
+	<input type="submit">
 </form>
+
 <h3>Reviews</h3>
-<% post.reviews.forEach(function(review){%>
+<!-- display all reviews -->
+<% post.reviews.forEach(function(review) { %>
 	<div>
-		<%=review.body%>
-		Rating :<%=review.rating%>
+		
+		<%= review.body %><br>
+		Rating: <%= review.rating %>
 	</div>
-<%});%>
+	<div>
+		<button class="toggle-edit-form">Edit</button>
+
+		<form action="/posts/<%= post.id %>/reviews/<%= review.id %>?_method=PUT" method="POST" class="edit-review-form">
+			<textarea name="review[body]" required><%= review.body %></textarea>
+			<input type="number" name="review[rating]" min="1" max="5" step="1" value="<%= review.rating %>" required>
+
+			<input type="submit" value="Update">
+		</form>
+		<form action="/posts/<%= post.id %>/reviews/<%= review.id %>?_method=DELETE" method="POST" >
+			
+			<input type="submit" value="Delete"/>
+		</form>
+	</div>
+	<hr>
+<% }); %>
