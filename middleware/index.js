@@ -7,9 +7,10 @@ module.exports = {
 		},
 		isReviewAuthor:async (req,res,next)=>{
 			let review  = await Review.findById(req.params.review_id);
-			if(review.author.equal(req.user._id)){
+			// if(review.author.equal(req.user._id)){
 				return next();
-			}req.session.error='Bye!';
-			return res.redirect('/');
+			// }
+			// req.session.error='Bye!';
+			// return res.redirect('/');
 		}
 }

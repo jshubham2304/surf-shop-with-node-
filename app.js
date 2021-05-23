@@ -62,6 +62,11 @@ passport.deserializeUser(User.deserializeUser());
 
 // set local variables middleware
 app.use(function(req, res, next) {
+  req.user = {
+    '_id' : '5bb27cd1f986d278582aa58c',
+    'username' : 'ian'
+  }
+  res.locals.currentUser = req.user;
   // set default page title
   res.locals.title = 'Surf Shop';
   // set success flash message
@@ -80,6 +85,11 @@ app.use('/posts', posts);
 app.use('/posts/:id/reviews', reviews);
 
 // catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -93,11 +103,6 @@ app.use(function(err, req, res, next) {
   console.log(err);
   req.session.error = err.message;
   res.redirect('back');
-});
-app.use(function(req, res, next) {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
 });
 
 module.exports = app;
