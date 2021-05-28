@@ -1,7 +1,17 @@
 <% layout('layouts/boilerplate') -%>
 <h1>Posts Index!</h1>
-
-<% posts.forEach(function(post) { %>
+<div style="margin: 20px;">
+<% if(posts.page-1){%>
+	<a href="/posts?page=<%=posts.page-1%>">Prev</a>
+	<%}%>
+	<% for(let i= 1;i<=posts.pages;i++){ %>
+		<a href="/posts?page=<%=i%>" ><%=i %></a>
+		<%}%>	
+				<% if(posts.page+1<=posts.pages){%>
+			<a href="/posts?page=<%=posts.page+1%>">Next</a>
+			<%}%>
+</div>
+<% posts.docs.forEach(function(post) { %>
 	<div>
 		<h2><%= post.title %></h2>
 		<div>Price: <%= post.price %></div>

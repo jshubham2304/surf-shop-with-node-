@@ -17,9 +17,9 @@ const methodOverride = require('method-override');
 const index 	= require('./routes/index');
 const posts 	= require('./routes/posts');
 const reviews = require('./routes/reviews');
-
+// const seedPost =  require('./seed');
 const app = express();
-
+// seedPost();
 // connect to the database
 mongoose.connect('mongodb+srv://admin:admin@cluster0.3oqox.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true });
 
