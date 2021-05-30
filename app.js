@@ -12,14 +12,16 @@ const User = require('./models/user');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+// const seedPosts = require('./seeds');
+// seedPosts();
 
 // require routes
 const index 	= require('./routes/index');
 const posts 	= require('./routes/posts');
 const reviews = require('./routes/reviews');
-// const seedPost =  require('./seed');
+
 const app = express();
-// seedPost();
+
 // connect to the database
 mongoose.connect('mongodb+srv://admin:admin@cluster0.3oqox.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true });
 
@@ -62,10 +64,12 @@ passport.deserializeUser(User.deserializeUser());
 
 // set local variables middleware
 app.use(function(req, res, next) {
-  req.user = {
-    '_id' : '5bb27cd1f986d278582aa58c',
-    'username' : 'ian'
-  }
+  // req.user = {
+  //   // '_id' : '5bb27cd1f986d278582aa58c',
+  //   // '_id' : '5bc521c0b142b6d7f7523406',
+  //   '_id' : '5bfed10ad176f845e38aec92',
+  //   'username' : 'ian3'
+  // }
   res.locals.currentUser = req.user;
   // set default page title
   res.locals.title = 'Surf Shop';

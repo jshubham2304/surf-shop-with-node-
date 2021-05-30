@@ -5,7 +5,7 @@ const {
 	reviewCreate,
 	reviewUpdate,
 	reviewDestroy
-} = require('../controllers/review');
+} = require('../controllers/reviews');
 
 /* review reviews create /posts/:id/reviews */
 router.post('/', asyncErrorHandler(reviewCreate));
